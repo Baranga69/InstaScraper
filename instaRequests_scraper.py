@@ -28,19 +28,34 @@ def get_headers(username):
     }
     return headers
 
-def parse_data(username, user_data):
-    captions = []
+# def parse_data(username, user_data):
+#     captions = []
+#     if len(user_data['edge_owner_to_timeline_media']['edges']) > 0:
+#         for node in user_data['edge_owner_to_timeline_media']['edges']:
+#             if len(node['node']['edge_media_to_caption']['edges']) > 0:
+#                 if node['node']['edge_media_to_caption']['edges'][0]['node']['text']:
+#                     captions.append(node['node']['edge_media_to_caption']['edges'][0]['node']['text'])
+    
+#     output[username] = {
+#         'name': user_data['full_name'],
+#         'category': user_data['category_name'],
+#         'followers': user_data['edge_followed_by']['count'],
+#         'number of posts': user_data['edge_owner_to_timeline_media']['count'],
+#         ##'posts': captions,
+#     }
+
+def parse_post_data(username, user_data):
+    post_urls = []
     if len(user_data['edge_owner_to_timeline_media']['edges']) > 0:
         for node in user_data['edge_owner_to_timeline_media']['edges']:
-            if len(node['node']['edge_media_to_caption']['edges']) > 0:
-                if node['node']['edge_media_to_caption']['edges'][0]['node']['text']:
-                    captions.append(node['node']['edge_media_to_caption']['edges'][0]['node']['text'])
+            post_urls.append(node['node']['display_url'])
     
     output[username] = {
         'name': user_data['full_name'],
         'category': user_data['category_name'],
         'followers': user_data['edge_followed_by']['count'],
-        'posts': captions,
+        'number of posts': user_data['edge_owner_to_timeline_media']['count'],
+        'posts': post_urls,
     }
 
 def main():
@@ -56,7 +71,7 @@ def main():
                 continue
             else:
                 user_data = resp_json['graphql']['user']
-                parse_data(username, user_data)
+                parse_post_data(username, user_data)
         elif response.status_code == 301 or response.status_code == 302:
             print ("Failed. Redirected to login")
         else:
