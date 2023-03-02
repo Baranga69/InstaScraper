@@ -28,21 +28,21 @@ def get_headers(username):
     }
     return headers
 
-# def parse_data(username, user_data):
-#     captions = []
-#     if len(user_data['edge_owner_to_timeline_media']['edges']) > 0:
-#         for node in user_data['edge_owner_to_timeline_media']['edges']:
-#             if len(node['node']['edge_media_to_caption']['edges']) > 0:
-#                 if node['node']['edge_media_to_caption']['edges'][0]['node']['text']:
-#                     captions.append(node['node']['edge_media_to_caption']['edges'][0]['node']['text'])
+def parse_data(username, user_data):
+    captions = []
+    if len(user_data['edge_owner_to_timeline_media']['edges']) > 0:
+        for node in user_data['edge_owner_to_timeline_media']['edges']:
+            if len(node['node']['edge_media_to_caption']['edges']) > 0:
+                if node['node']['edge_media_to_caption']['edges'][0]['node']['text']:
+                    captions.append(node['node']['edge_media_to_caption']['edges'][0]['node']['text'])
     
-#     output[username] = {
-#         'name': user_data['full_name'],
-#         'category': user_data['category_name'],
-#         'followers': user_data['edge_followed_by']['count'],
-#         'number of posts': user_data['edge_owner_to_timeline_media']['count'],
-#         ##'posts': captions,
-#     }
+    output[username] = {
+        'name': user_data['full_name'],
+        'category': user_data['category_name'],
+        'followers': user_data['edge_followed_by']['count'],
+        'number of posts': user_data['edge_owner_to_timeline_media']['count'],
+        ##'posts': captions,
+    }
 
 def parse_post_data(username, user_data):
     post_urls = []
