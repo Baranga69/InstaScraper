@@ -1,9 +1,10 @@
-import requests, json, random
+import requests, json, random, urllib.request
 from pprint import pprint
 
 usernames = ["tappi_app", "baoboxcafe", "the_copper_ivy"]
 #proxy = "http://username:password@proxy:port"
 output = {}
+post_urls = []
 
 def get_headers(username):
     headers = {
@@ -41,11 +42,10 @@ def parse_data(username, user_data):
         'category': user_data['category_name'],
         'followers': user_data['edge_followed_by']['count'],
         'number of posts': user_data['edge_owner_to_timeline_media']['count'],
-        ##'posts': captions,
+        'posts': captions,
     }
 
 def parse_post_data(username, user_data):
-    post_urls = []
     if len(user_data['edge_owner_to_timeline_media']['edges']) > 0:
         for node in user_data['edge_owner_to_timeline_media']['edges']:
             post_urls.append(node['node']['display_url'])
@@ -57,6 +57,15 @@ def parse_post_data(username, user_data):
         'number of posts': user_data['edge_owner_to_timeline_media']['count'],
         'posts': post_urls,
     }
+
+# def download_posts(url, file_path, file_name):
+#     full_path = file_path + file_name + '.jpg'
+#     urllib.urlretrieve(url, full_path)
+#     if len(post_urls) > 0:
+#         for url in post_urls:
+#             file_name = input("ig_post")
+#             download_posts(url, 'images/', file_name)
+
 
 def main():
     for username in usernames:
